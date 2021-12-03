@@ -9,8 +9,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookContent {
+public class BookDescriptionEntity {
     private long id;
-    private long book_id;
-    public String[] content;
+    private String title;
+    private int year;
+    private AuthorEntity authorEntity;
+    private BookContentEntity content;
 }

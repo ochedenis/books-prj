@@ -5,14 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Map;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDescription {
+public class BookContentEntity {
     private long id;
-    private String title;
-    private int year;
-    private Author author;
-    private BookContent content;
+    private BookDescriptionEntity description;
+    public Map<String, String> content;
 }

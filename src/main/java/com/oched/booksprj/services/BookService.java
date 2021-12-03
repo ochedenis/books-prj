@@ -1,12 +1,13 @@
 package com.oched.booksprj.services;
 
-import com.oched.booksprj.entities.Author;
-import com.oched.booksprj.entities.BookDescription;
+import com.oched.booksprj.entities.AuthorEntity;
+import com.oched.booksprj.entities.BookDescriptionEntity;
 import com.oched.booksprj.requests.AddBookRequest;
 import com.oched.booksprj.repositories.AuthorRepository;
 import com.oched.booksprj.repositories.BookRepository;
 import com.oched.booksprj.responses.BookResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,22 +20,22 @@ public class BookService {
     private final AuthorRepository authorRepository;
 
     public void addBook(AddBookRequest request) {
-        List<BookDescription> bookList = bookRepository.getBooks();
-        List<Author> authors = authorRepository.getAuthors();
-        Author author = null;
+        List<BookDescriptionEntity> bookList = bookRepository.getBooks();
+        List<AuthorEntity> authorEntities = authorRepository.getAuthorEntities();
+        AuthorEntity authorEntity = null;
 
-        for(Author listAuthor: authors) {
+        for(AuthorEntity listAuthorEntity : authorEntities) {
             if(
-                    listAuthor.getFirstName().equals(request.getAuthorFirstName()) &&
-                            listAuthor.getLastName().equals(request.getAuthorLastName())
+                    listAuthorEntity.getFirstName().equals(request.getAuthorFirstName()) &&
+                            listAuthorEntity.getLastName().equals(request.getAuthorLastName())
             ) {
-                author = listAuthor;
+                authorEntity = listAuthorEntity;
             }
         }
 
-        if(author == null) {
-            author = new Author(
-                    authors.size(),
+        if(authorEntity == null) {
+            authorEntity = new AuthorEntity(
+                    authorEntities.size(),
                     request.getAuthorFirstName(),
                     request.getAuthorLastName(),
                     null
@@ -42,25 +43,25 @@ public class BookService {
         }
 
         bookList.add(
-                new BookDescription(
+                new BookDescriptionEntity(
                         bookList.size(),
                         request.getTitle(),
                         request.getYear(),
-                        author,
+                        authorEntity,
                         null
                 )
         );
     }
 
     public List<BookResponse> getAll() {
-        List<BookDescription> bookList = bookRepository.getBooks();
+        List<BookDescriptionEntity> bookList = bookRepository.getBooks();
 
         return bookList.stream().map(
-                entry -> new BookResponse(
-                        entry.getTitle(),
-                        entry.getYear(),
-                        entry.getAuthor().getFirstName(),
-                        entry.getAuthor().getLastName()
+                book -> new BookResponse(
+                        book.getTitle(),
+                        book.getYear(),
+                        book.getAuthorEntity().getFirstName(),
+                        book.getAuthorEntity().getLastName()
                 )).collect(Collectors.toList());
     }
 }

@@ -1,6 +1,6 @@
 package com.oched.booksprj.repositories;
 
-import com.oched.booksprj.entities.BookDescription;
+import com.oched.booksprj.entities.BookDescriptionEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;
@@ -10,11 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @Component
 @Scope("singleton")
 public class BookRepository {
-    private List<BookDescription> books;
+    private List<BookDescriptionEntity> books;
 
     public BookRepository() {
         this.books = new ArrayList<>();
