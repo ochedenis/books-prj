@@ -1,31 +1,20 @@
 package com.oched.booksprj.controllers;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/bla")
 public class DefaultController {
 
-    @GetMapping
-    public ResponseEntity<String> index() {
-        return ResponseEntity.ok("Hello World!");
+    @GetMapping("/hello/{name}")
+    public ModelAndView getHello(@PathVariable String name, ModelAndView modelAndView) {
+        modelAndView.addObject(name);
+        modelAndView.setViewName("greeting.html");
+
+        return modelAndView;
     }
 
-    @GetMapping("/param")
-    public ResponseEntity<String> getParams(
-            @RequestParam String param1,
-            @RequestParam String param2,
-            HttpServletRequest request
-    ) {
-        String str = "param1 = " + param1 + " param2 = " + param2 +
-                "\nparam from servlet = " + request.getParameter("param2");
 
-        return ResponseEntity.ok(str);
-    }
 }

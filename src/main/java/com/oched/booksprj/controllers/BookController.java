@@ -1,0 +1,44 @@
+package com.oched.booksprj.controllers;
+
+import com.oched.booksprj.requests.AddBookRequest;
+import com.oched.booksprj.services.BookService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+
+@RequiredArgsConstructor
+@Controller
+@RequestMapping("/books")
+public class BookController {
+    private final BookService bookService;
+
+    @GetMapping(value = "/add")
+    private String getAddBookPage() {
+        return "/books/addBook.html";
+    }
+
+    @PostMapping(value = "/add")
+    public String addNewBook(@ModelAttribute("request") AddBookRequest request) {
+        this.bookService.addBook(request);
+
+        return "redirect:/books/all";
+    }
+
+    public void updateBook() {
+
+    }
+
+    public void deleteBook() {
+
+    }
+
+    @GetMapping("/all")
+    public ModelAndView getAllBooks(ModelAndView modelAndView) {
+        modelAndView.addObject("list", this.bookService.getAll());
+        modelAndView.setViewName("/books/allBooks.html");
+
+        return modelAndView;
+    }
+}
