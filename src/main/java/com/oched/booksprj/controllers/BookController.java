@@ -16,11 +16,11 @@ public class BookController {
 
     @GetMapping(value = "/add")
     private String getAddBookPage() {
-        return "/books/addBook.html";
+        return "/books/addBook";
     }
 
     @PostMapping(value = "/add")
-    public String addNewBook(@ModelAttribute("request") AddBookRequest request) {
+    public String addNewBook(final @ModelAttribute("request") AddBookRequest request) {
         this.bookService.addBook(request);
 
         return "redirect:/books/all";
@@ -35,9 +35,9 @@ public class BookController {
     }
 
     @GetMapping("/all")
-    public ModelAndView getAllBooks(ModelAndView modelAndView) {
+    public ModelAndView getAllBooks(final ModelAndView modelAndView) {
         modelAndView.addObject("list", this.bookService.getAll());
-        modelAndView.setViewName("/books/allBooks.html");
+        modelAndView.setViewName("/books/allBooks");
 
         return modelAndView;
     }

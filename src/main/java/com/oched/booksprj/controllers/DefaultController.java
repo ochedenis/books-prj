@@ -11,7 +11,7 @@ public class DefaultController {
     @GetMapping("/hello/{name}")
     public ModelAndView getHello(@PathVariable String name, ModelAndView modelAndView) {
         modelAndView.addObject(name);
-        modelAndView.setViewName("greeting.html");
+        modelAndView.setViewName("greeting");
 
         return modelAndView;
     }

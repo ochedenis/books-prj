@@ -11,9 +11,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Author {
+public class AuthorEntity {
     private long id;
     private String firstName;
     private String lastName;
-    private List<BookDescription> bookDescriptionList;
+    private List<BookDescriptionEntity> bookDescriptionEntityList;
 }
