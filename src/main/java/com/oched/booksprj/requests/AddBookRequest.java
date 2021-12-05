@@ -20,4 +20,6 @@ public class AddBookRequest {
     private String authorFirstName;
     @NotBlank
     private String authorLastName;
+    @NotBlank
+    private String content;
 }

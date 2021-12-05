@@ -1,0 +1,12 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New User</title>
+</head>
+<body>
+<h3 th:text="${user.login}">User login: </h3>
+<h3 th:text="${user.email}">User email: </h3>
+<hr>
+<p><a href="/users/add">Go to users form...</a></p>
+<p><a href="/users/all">Get list...</a></p>
+</body>
+</html>
