@@ -1,18 +1,22 @@
 package com.oched.booksprj.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.Map;
+import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
+@Entity
+@Table(name = "books_content")
 @NoArgsConstructor
-@AllArgsConstructor
 public class BookContentEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    public String content;
+    @OneToOne(mappedBy = "content")
     private BookDescriptionEntity description;
-    public Map<String, String> content;
+
+    public BookContentEntity(String content) {
+        this.content = content;
+    }
 }

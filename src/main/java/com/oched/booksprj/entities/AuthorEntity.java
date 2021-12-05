@@ -1,19 +1,25 @@
 package com.oched.booksprj.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import javax.persistence.*;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@Entity
+@Table(name = "authors")
 @NoArgsConstructor
-@AllArgsConstructor
 public class AuthorEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String firstName;
     private String lastName;
-    private List<BookDescriptionEntity> bookDescriptionEntityList;
+    @OneToMany(mappedBy="author", fetch = FetchType.LAZY)
+    private List<BookDescriptionEntity> booksList;
+
+    public AuthorEntity(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 }
