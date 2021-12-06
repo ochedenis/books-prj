@@ -5,4 +5,3 @@ CREATE TABLE authors (
      PRIMARY KEY (id),
      KEY (first_name, last_name)
 );
-
