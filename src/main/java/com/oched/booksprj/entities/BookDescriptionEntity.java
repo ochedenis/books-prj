@@ -16,7 +16,7 @@ public class BookDescriptionEntity {
     private String title;
     private int year;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="author_id", nullable=false)
+    @JoinColumn(name="author_id")
     private AuthorEntity author;
     @OneToOne
     @JoinColumn(name = "content_id")
