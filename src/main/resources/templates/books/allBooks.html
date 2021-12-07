@@ -9,24 +9,24 @@
 <table>
     <thead>
     <tr>
-        <th>Title | </th>
-        <th>Year | </th>
-        <th>Author first name | </th>
-        <th>Author last name | </th>
+        <th class="th-center">Title</th>
+        <th class="th-center">Year</th>
+        <th class="th-center">Author first name</th>
+        <th class="th-center">Author last name</th>
         <th class="th-center">Action</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="book : ${list}">
-        <td th:text="${book.title}"></td>
-        <td th:text="${book.year}"></td>
-        <td th:text="${book.authorFirstName}"></td>
-        <td th:text="${book.authorLastName}"></td>
+        <td th:text=${book.title}></td>
+        <td th:text=${book.year}></td>
+        <td th:text=${book.authorFirstName}></td>
+        <td th:text=${book.authorLastName}></td>
         <td>
             <form class="table-button">
-                <input class="table-button" type="submit" value="edit" th:action="@{../books/edit}" method="get">
-                <input class="table-button" type="submit" value="delete" th:action="@{../books/delete}" method="delete">
-<!--                <input type="hidden" th:value="${book.id}" name="id">-->
+                <input type="submit" value="edit" th:formaction=@{../books/edit} method="get" th:object=${request} class="table-button">
+                <input type="submit" value="delete" th:formaction=@{../books/delete} method="get" th:object=${request} class="table-button" >
+                <input type="hidden" th:value=${book.id} name="id">
             </form>
         </td>
     </tr>
@@ -35,7 +35,7 @@
 
 <hr>
 
-<h3><a href="/books/add">Add book...</a></h3>
-<h3><a href="/">Go to main...</a></h3>
+<h5><a href="/books/add">Add book...</a></h5>
+<h5><a href="/">Go to main...</a></h5>
 </body>
 </html>

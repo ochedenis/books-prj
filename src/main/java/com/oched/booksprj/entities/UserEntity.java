@@ -2,6 +2,7 @@ package com.oched.booksprj.entities;
 
 import com.oched.booksprj.enumerations.UserRole;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +26,11 @@ public class UserEntity {
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Collection<UserRole> roles;
+
+    public UserEntity(String login, String email, String password, Collection<UserRole> roles) {
+        this.login = login;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
 }
