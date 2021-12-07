@@ -4,11 +4,12 @@ import com.oched.booksprj.entities.AuthorEntity;
 import com.oched.booksprj.entities.BookContentEntity;
 import com.oched.booksprj.entities.BookDescriptionEntity;
 import com.oched.booksprj.repositories.BookContentRepository;
-import com.oched.booksprj.requests.BookRequest;
+import com.oched.booksprj.requests.ActionRequest;
+import com.oched.booksprj.requests.EditBookRequest;
+import com.oched.booksprj.requests.NewBookRequest;
 import com.oched.booksprj.repositories.AuthorRepository;
 import com.oched.booksprj.repositories.BookRepository;
-import com.oched.booksprj.requests.DeleteBookRequest;
-import com.oched.booksprj.responses.BookResponse;
+import com.oched.booksprj.responses.BookInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +27,7 @@ public class BookService {
     private final AuthorRepository authorRepository;
     private final BookContentRepository contentRepository;
 
-    public void addBook(BookRequest request) {
+    public void addBook(NewBookRequest request) {
         Optional<AuthorEntity> optionalAuthor = authorRepository.findByFirstNameAndLastName(
                 request.getAuthorFirstName(),
                 request.getAuthorLastName()
@@ -59,7 +60,23 @@ public class BookService {
         bookRepository.save(newBook);
     }
 
-    public void editBook(BookRequest request) {
+    public List<BookInfoResponse> getAll() {
+        List<BookDescriptionEntity> list = bookRepository.findAll();
+
+        return list.stream().map(book -> new BookInfoResponse(
+                book.getId(),
+                book.getTitle(),
+                book.getYear(),
+                book.getAuthor().getFirstName(),
+                book.getAuthor().getLastName()
+        )).collect(Collectors.toList());
+    }
+
+    public void deleteBook(ActionRequest request) {
+        this.bookRepository.deleteById(request.getId());
+    }
+
+    public void editBook(EditBookRequest request) {
         Optional<BookDescriptionEntity> optional = this.bookRepository.findById(request.getId());
 
         if(optional.isEmpty()) {
@@ -93,8 +110,8 @@ public class BookService {
         this.bookRepository.save(book);
     }
 
-    public BookResponse getById(long id) {
-        Optional<BookDescriptionEntity> optional = this.bookRepository.findById(id);
+    public BookInfoResponse getById(ActionRequest request) {
+        Optional<BookDescriptionEntity> optional = this.bookRepository.findById(request.getId());
 
         if(optional.isEmpty()) {
             throw new RuntimeException();
@@ -102,28 +119,12 @@ public class BookService {
 
         BookDescriptionEntity book = optional.get();
 
-        return new BookResponse(
+        return new BookInfoResponse(
                 book.getId(),
                 book.getTitle(),
                 book.getYear(),
                 book.getAuthor().getFirstName(),
                 book.getAuthor().getLastName()
         );
-    }
-
-    public void deleteBook(Long id) {
-        this.bookRepository.deleteById(id);
-    }
-
-    public List<BookResponse> getAll() {
-        List<BookDescriptionEntity> list = bookRepository.findAll();
-
-        return list.stream().map(book -> new BookResponse(
-                    book.getId(),
-                    book.getTitle(),
-                    book.getYear(),
-                    book.getAuthor().getFirstName(),
-                    book.getAuthor().getLastName()
-                )).collect(Collectors.toList());
     }
 }

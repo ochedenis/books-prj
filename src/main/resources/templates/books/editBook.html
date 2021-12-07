@@ -6,12 +6,12 @@
 </head>
 <body>
 
-<form th:action="@{../books/edit}" method="put" th:object="${request}">
-    <p>Title : <input type="text" name="title" th:value="${book.title}"></p>
+<form th:action=@{../books/edit} method="post" th:object=${request}>
+    <p>Title : <input type="text" name="title" th:value=${book.title}></p>
     <p>Year : <input type="text" name="year" th:value=${book.year}></p>
     <p>Author first name: <input type="text" name="authorFirstName" th:value=${book.authorFirstName}></p>
     <p>Author last name: <input type="text" name="authorLastName" th:value=${book.authorLastName}></p>
-    <input type="hidden" th:value="${book.id}" name="id">
+    <input type="hidden" th:value=${book.id} name="id">
     <input type="submit" value="Pass data">
 </form>
 
