@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<BookDescriptionEntity, Long> {
 
-    Optional<BookDescriptionEntity> findByTitleAndYearOrderByYearAsc(String title, int year);
+    Optional<BookDescriptionEntity> findTopByTitleAndYearOrderByIdDesc(String title, int year);
 }
