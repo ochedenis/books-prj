@@ -30,7 +30,7 @@ public class UserService {
         this.userRepository.save(new UserEntity(
                 request.getLogin(),
                 request.getEmail(),
-                request.getEmail(),
+                request.getPassword(),
                 roleList
         ));
 

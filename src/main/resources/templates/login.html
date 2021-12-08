@@ -7,18 +7,12 @@
     <body>
         <h2>Login Page!</h2>
         <h3>Enter your credentials:</h3>
-
         <form th:action=@{/perform_login} method="post">
-            <p>Login: </p>
-            <input type="text" name="username"/><br/>
-            <br/>
-            <p>Password: </p>
-            <input type="password" name="password">
-            <br/>
+            <p>Login -><input type="text" name="username"/></p>
+            <p>Password -><input type="password" name="password"></p>
+            <br>
             <input type="submit" value="Login">
         </form>
-
         <h5><a href="/">Go to main...</a></h5>
-
     </body>
 </html>

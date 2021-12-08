@@ -29,7 +29,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE user_roles (
-    user_id 		BIGSERIAL UNIQUE NOT NULL,
+    user_id 		BIGSERIAL NOT NULL,
     roles 			VARCHAR(250),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

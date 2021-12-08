@@ -1,4 +1,4 @@
 databaseChangeLog:
   - includeAll:
-      path: db/changelog/mysql-changes/
-#      path: db/changelog/postgres-changes/
+#      path: db/changelog/mysql-changes/
+      path: db/changelog/postgres-changes/
