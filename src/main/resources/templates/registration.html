@@ -10,7 +10,7 @@
 
 <br>
 
-<form th:action="@{/registration}" method="post" th:object="${user}">
+<form th:action=@{/registration} method="post" th:object=${request}>
 
     <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1">Login</span>
@@ -38,7 +38,7 @@
 
     <br>
 
-    <select class="form-select" aria-label="Default select example">
+    <select class="form-select" aria-label="Default select example" name="role">
         <option selected>Pls set your role</option>
         <option value="USER">User</option>
         <option value="ADMIN">Admin</option>
