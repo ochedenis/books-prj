@@ -13,7 +13,6 @@ import javax.sql.DataSource;
 
 
 @Configuration
-
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
@@ -42,9 +41,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .csrf().disable()
                 .authorizeRequests()
-                .mvcMatchers("/users/*", "/books/add", "/books/edit", "/books/delete")
+                .mvcMatchers("/users/add", "/books/add", "/books/edit", "/books/delete")
                 .hasRole("ADMIN")
-                .mvcMatchers("/books/all", "/hello/**")
+                .mvcMatchers("/books/all", "/users/all", "/hello/**")
                 .hasAnyRole("ADMIN","USER")
                 .antMatchers(
                         "/", "/login", "/registration", "/perform_logout"
@@ -56,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .loginProcessingUrl("/perform_login")
                 .failureForwardUrl("/login?error=true")
-                .defaultSuccessUrl("/", false)
+                .defaultSuccessUrl("/",false)
                 .and()
                 .logout().logoutUrl("/perform_logout").logoutSuccessUrl("/");
     }

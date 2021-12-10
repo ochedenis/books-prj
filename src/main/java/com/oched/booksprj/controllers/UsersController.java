@@ -4,6 +4,7 @@ import com.oched.booksprj.requests.NewUserRequest;
 import com.oched.booksprj.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +24,7 @@ public class UsersController {
     }
 
     @PostMapping(value = "/add")
-    public ModelAndView addNewUser(@ModelAttribute("request") NewUserRequest request, ModelAndView modelAndView) {
+    public ModelAndView addNewUser(@Validated @ModelAttribute("request") NewUserRequest request, ModelAndView modelAndView) {
         modelAndView.setViewName("/users/newUser");
         modelAndView.addObject("user", this.userService.addNewUser(request));
 
