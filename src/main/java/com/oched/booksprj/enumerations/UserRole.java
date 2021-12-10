@@ -1,5 +1,5 @@
 package com.oched.booksprj.enumerations;
 
 public enum UserRole {
-    ADMIN, USER
+    ROLE_ADMIN, ROLE_USER
 }

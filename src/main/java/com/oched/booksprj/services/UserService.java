@@ -6,6 +6,7 @@ import com.oched.booksprj.repositories.UserRepository;
 import com.oched.booksprj.requests.NewUserRequest;
 import com.oched.booksprj.responses.UserInfoResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,19 +19,20 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserInfoResponse addNewUser(NewUserRequest request) {
         List<UserRole> roleList = new ArrayList<>();
-        roleList.add(UserRole.USER);
+        roleList.add(UserRole.ROLE_USER);
 
         if(request.getRole().equals("ADMIN")) {
-            roleList.add(UserRole.ADMIN);
+            roleList.add(UserRole.ROLE_ADMIN);
         }
 
         this.userRepository.save(new UserEntity(
                 request.getLogin(),
                 request.getEmail(),
-                request.getPassword(),
+                this.passwordEncoder.encode(request.getPassword()),
                 roleList
         ));
 
