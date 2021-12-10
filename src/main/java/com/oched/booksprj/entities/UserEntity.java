@@ -22,6 +22,7 @@ public class UserEntity {
     private String password;
     @CreationTimestamp
     private Date registeredOn;
+    private boolean auth = true;
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
