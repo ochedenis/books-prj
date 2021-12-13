@@ -40,18 +40,21 @@ public class BookController {
     public ModelAndView getEditBookPage(ModelAndView modelAndView, @ModelAttribute("request") ActionRequest request) {
         modelAndView.addObject("book", this.bookService.getById(request));
         modelAndView.setViewName("/books/editBook");
+
         return modelAndView;
     }
 
     @PostMapping(value = "/edit")
     public String updateBook(final @ModelAttribute("request") EditBookRequest request) {
         this.bookService.editBook(request);
+
         return "redirect:/books/all";
     }
 
     @GetMapping(value = "/delete")
     public String deleteBook(@ModelAttribute("request") ActionRequest request) {
         this.bookService.deleteBook(request);
+
         return "redirect:/books/all";
     }
 }

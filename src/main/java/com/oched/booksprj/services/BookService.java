@@ -76,7 +76,7 @@ public class BookService {
         this.bookRepository.deleteById(request.getId());
     }
 
-    public void editBook(EditBookRequest request) {
+    public BookInfoResponse editBook(EditBookRequest request) {
         Optional<BookDescriptionEntity> optional = this.bookRepository.findById(request.getId());
 
         if(optional.isEmpty()) {
@@ -108,6 +108,14 @@ public class BookService {
         book.setYear(request.getYear());
 
         this.bookRepository.save(book);
+
+        return new BookInfoResponse(
+                book.getId(),
+                book.getTitle(),
+                book.getYear(),
+                book.getAuthor().getFirstName(),
+                book.getAuthor().getLastName()
+        );
     }
 
     public BookInfoResponse getById(ActionRequest request) {
