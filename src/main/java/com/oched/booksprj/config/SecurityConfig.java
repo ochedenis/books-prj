@@ -27,7 +27,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 ).passwordEncoder(passwordEncoder());
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         // passwordEncoder.encode("12345"))
@@ -46,7 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/books/all", "/users/all", "/hello/**")
                 .hasAnyRole("ADMIN","USER")
                 .antMatchers(
-                        "/", "/login", "/registration", "/perform_logout"
+                        "/", "/login", "/registration", "/perform_logout",
+                        "/rest/**"
                 ).permitAll()
                 .and()
                 .formLogin()
