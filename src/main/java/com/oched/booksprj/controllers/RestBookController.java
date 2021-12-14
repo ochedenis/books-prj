@@ -18,6 +18,11 @@ import javax.validation.Valid;
 public class RestBookController {
     private final BookService bookService;
 
+    @GetMapping("/book/{id}")
+    public ResponseEntity<BookInfoResponse> getBook(final @PathVariable Long id) {
+        return new ResponseEntity<>(this.bookService.getById(new ActionRequest(id)), HttpStatus.OK);
+    }
+
     @GetMapping("/list")
     public ResponseEntity<BookInfoResponse[]> getAllBooks() {
         return new ResponseEntity<>(
