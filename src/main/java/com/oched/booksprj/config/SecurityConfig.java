@@ -117,7 +117,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 <jdbc-user-service
                         data-source-ref="dataSource"
                         users-by-username-query="SELECT login, password, id FROM users WHERE login=?"
-                        authorities-by-username-query="SELECT user_id, roles FROM user_roles WHERE user_id=(SELECT id from users WHERE login=?)"
+                        authorities-by-username-query="SELECT user_id,
+                        roles FROM user_roles WHERE user_id=(SELECT id from users WHERE login=?)"
                 />
                 <password-encoder ref="passwordEncoder"/>
             </authentication-provider>
