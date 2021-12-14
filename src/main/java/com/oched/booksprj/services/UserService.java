@@ -4,14 +4,17 @@ import com.oched.booksprj.entities.UserEntity;
 import com.oched.booksprj.enumerations.UserRole;
 import com.oched.booksprj.repositories.UserRepository;
 import com.oched.booksprj.requests.NewUserRequest;
+import com.oched.booksprj.requests.UpdateUserRequest;
 import com.oched.booksprj.responses.UserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +25,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public UserInfoResponse addNewUser(NewUserRequest request) {
-        List<UserRole> roleList = new ArrayList<>();
+        Set<UserRole> roleList = new HashSet<>();
         roleList.add(UserRole.ROLE_USER);
 
         if(request.getRole().equals("ADMIN")) {
@@ -51,5 +54,30 @@ public class UserService {
                         user.getEmail()
                 )
         ).collect(Collectors.toList());
+    }
+
+    public UserInfoResponse updateUser(UpdateUserRequest request) {
+        Optional<UserEntity> optional = this.userRepository.findById(request.getId());
+
+        UserEntity user = optional.orElseThrow(() -> new IllegalArgumentException("No user with such id!"));
+
+        user.setLogin(request.getLogin());
+        user.setEmail(request.getEmail());
+        user.setPassword(
+                this.passwordEncoder.encode(request.getPassword())
+        );
+        user.getRoles().add(request.getRole());
+
+        this.userRepository.save(user);
+
+        return new UserInfoResponse(
+                user.getLogin(),
+                user.getEmail()
+        );
+    }
+
+
+    public void deleteUser(Long id) {
+        this.userRepository.deleteById(id);
     }
 }

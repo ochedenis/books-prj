@@ -79,11 +79,7 @@ public class BookService {
     public BookInfoResponse editBook(EditBookRequest request) {
         Optional<BookDescriptionEntity> optional = this.bookRepository.findById(request.getId());
 
-        if(optional.isEmpty()) {
-            throw new RuntimeException();
-        }
-
-        BookDescriptionEntity book = optional.get();
+        BookDescriptionEntity book = optional.orElseThrow(() -> new IllegalArgumentException("No book with such id!"));
 
         Optional<AuthorEntity> optionalAuthor = this.authorRepository.findByFirstNameAndLastName(
                 request.getAuthorFirstName(),
@@ -121,11 +117,7 @@ public class BookService {
     public BookInfoResponse getById(ActionRequest request) {
         Optional<BookDescriptionEntity> optional = this.bookRepository.findById(request.getId());
 
-        if(optional.isEmpty()) {
-            throw new RuntimeException();
-        }
-
-        BookDescriptionEntity book = optional.get();
+        BookDescriptionEntity book = optional.orElseThrow(() -> new IllegalArgumentException("No book with such id!"));
 
         return new BookInfoResponse(
                 book.getId(),
