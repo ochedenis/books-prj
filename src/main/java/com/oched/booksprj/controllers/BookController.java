@@ -17,7 +17,7 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping(value = "/add")
-    private String getAddBookPage() {
+    public String getAddBookPage() {
         return "/books/addBook";
     }
 

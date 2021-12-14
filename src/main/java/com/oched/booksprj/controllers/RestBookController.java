@@ -5,7 +5,6 @@ import com.oched.booksprj.requests.EditBookRequest;
 import com.oched.booksprj.requests.NewBookRequest;
 import com.oched.booksprj.responses.BookInfoResponse;
 import com.oched.booksprj.services.BookService;
-import com.oched.booksprj.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +14,18 @@ import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/rest")
-public class RestAppController {
+@RequestMapping("/book-rest")
+public class RestBookController {
     private final BookService bookService;
-    private final UserService userService;
 
-    @PostMapping("/add-new-book")
+    @GetMapping("/list")
+    public ResponseEntity<BookInfoResponse[]> getAllBooks() {
+        return new ResponseEntity<>(
+                this.bookService.getAll().toArray(new BookInfoResponse[0]),
+                HttpStatus.OK);
+    }
+
+    @PostMapping("/add")
     public ResponseEntity<Void> addNewBook(
             final @Valid @RequestBody NewBookRequest request
     ) {
@@ -29,23 +34,17 @@ public class RestAppController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/books-list")
-    public ResponseEntity<BookInfoResponse[]> getAllBooks() {
-        return new ResponseEntity<>(this.bookService.getAll().toArray(new BookInfoResponse[0]), HttpStatus.OK);
-    }
-
-    @PutMapping("/update-book")
+    @PutMapping("/update")
     public ResponseEntity<BookInfoResponse> updateBook(
             final @Valid @RequestBody EditBookRequest request
     ) {
         return new ResponseEntity<>(this.bookService.editBook(request), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete-book/{id}")
-    public ResponseEntity<BookInfoResponse[]> getHello(final @PathVariable Long id) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<BookInfoResponse[]> deleteBook(final @PathVariable Long id) {
         this.bookService.deleteBook(new ActionRequest(id));
 
         return new ResponseEntity<>(this.bookService.getAll().toArray(new BookInfoResponse[0]), HttpStatus.OK);
     }
-
 }

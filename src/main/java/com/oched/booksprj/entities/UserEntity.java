@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @Entity
@@ -26,9 +26,9 @@ public class UserEntity {
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    private Collection<UserRole> roles;
+    private Set<UserRole> roles;
 
-    public UserEntity(String login, String email, String password, Collection<UserRole> roles) {
+    public UserEntity(String login, String email, String password, Set<UserRole> roles) {
         this.login = login;
         this.email = email;
         this.password = password;

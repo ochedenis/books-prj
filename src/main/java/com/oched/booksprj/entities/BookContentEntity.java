@@ -12,7 +12,7 @@ public class BookContentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    public String content;
+    private String content;
     @OneToOne(mappedBy = "content")
     private BookDescriptionEntity description;
 

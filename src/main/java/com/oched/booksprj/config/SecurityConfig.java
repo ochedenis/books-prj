@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -59,6 +60,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().logoutUrl("/perform_logout").logoutSuccessUrl("/");
     }
+
+    @Override
+    public final void configure(final WebSecurity webSecurity) {
+        webSecurity.ignoring()
+                .antMatchers("/swagger-ui/**", "/v3/api-docs/**");
+    }
 }
 
 /*
@@ -110,7 +117,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 <jdbc-user-service
                         data-source-ref="dataSource"
                         users-by-username-query="SELECT login, password, id FROM users WHERE login=?"
-                        authorities-by-username-query="SELECT user_id, roles FROM user_roles WHERE user_id=(SELECT id from users WHERE login=?)"
+                        authorities-by-username-query="SELECT user_id,
+                        roles FROM user_roles WHERE user_id=(SELECT id from users WHERE login=?)"
                 />
                 <password-encoder ref="passwordEncoder"/>
             </authentication-provider>
