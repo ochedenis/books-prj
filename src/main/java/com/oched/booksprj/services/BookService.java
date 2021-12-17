@@ -3,6 +3,7 @@ package com.oched.booksprj.services;
 import com.oched.booksprj.entities.AuthorEntity;
 import com.oched.booksprj.entities.BookContentEntity;
 import com.oched.booksprj.entities.BookDescriptionEntity;
+import com.oched.booksprj.exceptions.BadRequestException;
 import com.oched.booksprj.repositories.BookContentRepository;
 import com.oched.booksprj.requests.ActionRequest;
 import com.oched.booksprj.requests.EditBookRequest;
@@ -11,6 +12,12 @@ import com.oched.booksprj.repositories.AuthorRepository;
 import com.oched.booksprj.repositories.BookRepository;
 import com.oched.booksprj.responses.BookInfoResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -58,10 +65,13 @@ public class BookService {
         );
 
         bookRepository.save(newBook);
+        clearCache();
     }
 
+    @Cacheable("listCache")
     public List<BookInfoResponse> getAll() {
         List<BookDescriptionEntity> list = bookRepository.findAll();
+
 
         return list.stream().map(book -> new BookInfoResponse(
                 book.getId(),
@@ -79,7 +89,9 @@ public class BookService {
     public BookInfoResponse editBook(EditBookRequest request) {
         Optional<BookDescriptionEntity> optional = this.bookRepository.findById(request.getId());
 
-        BookDescriptionEntity book = optional.orElseThrow(() -> new IllegalArgumentException("No book with such id!"));
+        BookDescriptionEntity book = optional.orElseThrow(
+                () -> new BadRequestException("No book with such id!", HttpStatus.BAD_REQUEST)
+        );
 
         Optional<AuthorEntity> optionalAuthor = this.authorRepository.findByFirstNameAndLastName(
                 request.getAuthorFirstName(),
@@ -105,6 +117,8 @@ public class BookService {
 
         this.bookRepository.save(book);
 
+        clearCache();
+
         return new BookInfoResponse(
                 book.getId(),
                 book.getTitle(),
@@ -114,10 +128,13 @@ public class BookService {
         );
     }
 
+    @Cacheable(value = "singleCache", condition="#request.getId()==3")
     public BookInfoResponse getById(ActionRequest request) {
         Optional<BookDescriptionEntity> optional = this.bookRepository.findById(request.getId());
 
-        BookDescriptionEntity book = optional.orElseThrow(() -> new IllegalArgumentException("No book with such id!"));
+        BookDescriptionEntity book = optional.orElseThrow(
+                () -> new BadRequestException("No book with such id!", HttpStatus.BAD_REQUEST)
+        );
 
         return new BookInfoResponse(
                 book.getId(),
@@ -126,5 +143,11 @@ public class BookService {
                 book.getAuthor().getFirstName(),
                 book.getAuthor().getLastName()
         );
+    }
+
+    @Scheduled(fixedRate = 60000, fixedDelay = 600000)
+    @CacheEvict({"listCache", "singleCache"})
+    public void clearCache() {
+        log.info("CACHE log :::::::::::::::::::::::::> listCache was cleared!");
     }
 }
