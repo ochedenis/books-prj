@@ -18,9 +18,7 @@ import java.util.Date;
 @Slf4j
 @ControllerAdvice
 public class ExceptionHandlerController {
-    @ExceptionHandler({
-            BadRequestException.class
-    })
+    @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ExceptionResponse> handleBadRequestException(
             final HttpServletRequest request, final BadRequestException exception
     ) {

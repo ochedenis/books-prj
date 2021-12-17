@@ -13,5 +13,4 @@ public class CachingConfig {
     public CacheManager listCacheManager() {
         return new ConcurrentMapCacheManager("listCache", "singleCache");
     }
-
 }

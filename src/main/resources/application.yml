@@ -1,8 +1,4 @@
 spring:
-#    session:
-#        store-type: jdbc
-#        jdbc.initialize-schema: always
-
     jpa.open-in-view: false
 
 server.port: 8080
