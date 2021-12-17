@@ -13,10 +13,8 @@ import com.oched.booksprj.repositories.BookRepository;
 import com.oched.booksprj.responses.BookInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +30,7 @@ public class BookService {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final BookContentRepository contentRepository;
+    private final Scheduler scheduler;
 
     public void addBook(NewBookRequest request) {
         Optional<AuthorEntity> optionalAuthor = authorRepository.findByFirstNameAndLastName(
@@ -49,12 +48,12 @@ public class BookService {
                     request.getAuthorLastName()
             );
 
-            authorRepository.save(author);
+            this.authorRepository.save(author);
         }
 
         BookContentEntity bookContent = new BookContentEntity(request.getContent());
 
-        contentRepository.save(bookContent);
+        this.contentRepository.save(bookContent);
 
         BookDescriptionEntity newBook = new BookDescriptionEntity(
                 request.getTitle(),
@@ -63,11 +62,11 @@ public class BookService {
                 bookContent
         );
 
-        bookRepository.save(newBook);
-        clearCache();
+        this.bookRepository.save(newBook);
+        this.scheduler.clearCache();
     }
 
-    @Cacheable("listCache")
+    @Cacheable("bookCache")
     public List<BookInfoResponse> getAll() {
         List<BookDescriptionEntity> list = bookRepository.findAll();
 
@@ -83,6 +82,7 @@ public class BookService {
 
     public void deleteBook(ActionRequest request) {
         this.bookRepository.deleteById(request.getId());
+        this.scheduler.clearCache();
     }
 
     public BookInfoResponse editBook(EditBookRequest request) {
@@ -115,8 +115,7 @@ public class BookService {
         book.setYear(request.getYear());
 
         this.bookRepository.save(book);
-
-        clearCache();
+        this.scheduler.clearCache();
 
         return new BookInfoResponse(
                 book.getId(),
@@ -127,7 +126,6 @@ public class BookService {
         );
     }
 
-    @Cacheable(value = "singleCache", condition="#request.getId()==3")
     public BookInfoResponse getById(ActionRequest request) {
         Optional<BookDescriptionEntity> optional = this.bookRepository.findById(request.getId());
 
@@ -142,11 +140,5 @@ public class BookService {
                 book.getAuthor().getFirstName(),
                 book.getAuthor().getLastName()
         );
-    }
-
-    @Scheduled(fixedRate = 60000, fixedDelay = 600000)
-    @CacheEvict({"listCache", "singleCache"})
-    public void clearCache() {
-        log.info("CACHE log :::::::::::::::::::::::::> listCache was cleared!");
     }
 }

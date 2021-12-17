@@ -8,6 +8,7 @@ import com.oched.booksprj.requests.NewUserRequest;
 import com.oched.booksprj.requests.UpdateUserRequest;
 import com.oched.booksprj.responses.UserInfoResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final Scheduler scheduler;
 
     public UserInfoResponse addNewUser(NewUserRequest request) {
         Set<UserRole> roleList = new HashSet<>();
@@ -40,6 +42,7 @@ public class UserService {
                 this.passwordEncoder.encode(request.getPassword()),
                 roleList
         ));
+        this.scheduler.clearCache();
 
         return new UserInfoResponse(
                 request.getLogin(),
@@ -47,6 +50,7 @@ public class UserService {
         );
     }
 
+    @Cacheable("userCache")
     public List<UserInfoResponse> getUsersList() {
         List<UserEntity> list = this.userRepository.findAll();
 
@@ -73,6 +77,7 @@ public class UserService {
         user.getRoles().add(request.getRole());
 
         this.userRepository.save(user);
+        this.scheduler.clearCache();
 
         return new UserInfoResponse(
                 user.getLogin(),
@@ -82,6 +87,7 @@ public class UserService {
 
 
     public void deleteUser(Long id) {
+        this.scheduler.clearCache();
         this.userRepository.deleteById(id);
     }
 }
