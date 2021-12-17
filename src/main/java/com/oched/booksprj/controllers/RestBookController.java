@@ -6,6 +6,7 @@ import com.oched.booksprj.requests.NewBookRequest;
 import com.oched.booksprj.responses.BookInfoResponse;
 import com.oched.booksprj.services.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,11 @@ import javax.validation.Valid;
 @RequestMapping("/book-rest")
 public class RestBookController {
     private final BookService bookService;
+
+    @GetMapping("/book/{id}")
+    public ResponseEntity<BookInfoResponse> getBook(final @PathVariable Long id) {
+        return new ResponseEntity<>(this.bookService.getById(new ActionRequest(id)), HttpStatus.OK);
+    }
 
     @GetMapping("/list")
     public ResponseEntity<BookInfoResponse[]> getAllBooks() {

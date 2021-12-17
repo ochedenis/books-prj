@@ -2,11 +2,13 @@ package com.oched.booksprj.services;
 
 import com.oched.booksprj.entities.UserEntity;
 import com.oched.booksprj.enumerations.UserRole;
+import com.oched.booksprj.exceptions.BadRequestException;
 import com.oched.booksprj.repositories.UserRepository;
 import com.oched.booksprj.requests.NewUserRequest;
 import com.oched.booksprj.requests.UpdateUserRequest;
 import com.oched.booksprj.responses.UserInfoResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +61,9 @@ public class UserService {
     public UserInfoResponse updateUser(UpdateUserRequest request) {
         Optional<UserEntity> optional = this.userRepository.findById(request.getId());
 
-        UserEntity user = optional.orElseThrow(() -> new IllegalArgumentException("No user with such id!"));
+        UserEntity user = optional.orElseThrow(
+                () -> new BadRequestException("No user with such id!", HttpStatus.BAD_REQUEST)
+        );
 
         user.setLogin(request.getLogin());
         user.setEmail(request.getEmail());
