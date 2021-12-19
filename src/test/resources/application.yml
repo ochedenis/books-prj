@@ -1,0 +1,16 @@
+spring:
+#    liquibase:
+#        enabled: false
+    datasource:
+        url: jdbc:mysql://localhost:3306/bla?serverTimezone=UTC
+        username: root
+        password: 11235813
+    jpa.open-in-view: false
+
+springdoc:
+    swagger-ui:
+        enabled: false
+    api-docs:
+        enabled: false
+
+server.port: 8080

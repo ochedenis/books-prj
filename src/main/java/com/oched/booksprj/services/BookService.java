@@ -55,6 +55,10 @@ public class BookService {
 
         this.contentRepository.save(bookContent);
 
+        if(request.getContent().length() < 3) {
+            throw new BadRequestException("Content is too short!", HttpStatus.BAD_REQUEST);
+        }
+
         BookDescriptionEntity newBook = new BookDescriptionEntity(
                 request.getTitle(),
                 request.getYear(),

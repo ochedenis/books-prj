@@ -6,13 +6,11 @@ import com.oched.booksprj.requests.NewBookRequest;
 import com.oched.booksprj.responses.BookInfoResponse;
 import com.oched.booksprj.services.BookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
@@ -57,3 +55,4 @@ public class RestBookController {
         return new ResponseEntity<>(this.bookService.getAll().toArray(new BookInfoResponse[0]), HttpStatus.OK);
     }
 }
+
