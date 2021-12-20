@@ -13,8 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -75,21 +78,24 @@ class BookServiceTests {
                 request.getId()
         )).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(BadRequestException.class, () ->
+        BadRequestException exception = assertThrows(BadRequestException.class, () ->
                 bookService.editBook(request)
         );
         assertEquals(
                 "No book with such id!",
                 exception.getMessage()
         );
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
 
         when(bookRepository.findById(
                 request.getId()
         )).thenReturn(Optional.of(new BookDescriptionEntity()));
         when(authorRepository.findByFirstNameAndLastName(
                 request.getAuthorFirstName(),
-                request.getAuthorLastName())
-        ).thenReturn(Optional.empty());
+                request.getAuthorLastName()
+        )).thenReturn(Optional.empty());
+        // any(String.class)
+
 
         BookInfoResponse response = bookService.editBook(request);
 

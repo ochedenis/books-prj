@@ -22,7 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 //@Sql({"/some_test_data.sql", "/some_test_data2.sql"})
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Transactional
 public class RestBookControllerTests {
     @Autowired
@@ -41,7 +40,6 @@ public class RestBookControllerTests {
                 mvcResult.getResponse().getContentAsString(),
                 BookInfoResponse[].class
         );
-
 
         assertEquals(0, response.length);
 

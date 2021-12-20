@@ -1,6 +1,6 @@
 spring:
-#    liquibase:
-#        enabled: false
+    liquibase:
+        enabled: false
     datasource:
         url: jdbc:mysql://localhost:3306/bla?serverTimezone=UTC
         username: root
